@@ -49,10 +49,6 @@ const userschema = new mongoose.Schema({
 timestamps:true
 })
 
-const User = mongoose.model("User",userschema)
-
-//pre hooks
-
 userschema.pre("save",async function (next) {
     if(!this.isModified("password"))return next()
     try {
@@ -63,5 +59,12 @@ userschema.pre("save",async function (next) {
         next(error)
     }
 })
+userschema.methods.matchPassword = async function (enteredPassword) {
+    return await bcrypt.compare(enteredPassword, this.password);
+  };
+    
+const User = mongoose.model("User",userschema)
+
+//pre hooks
 
 export default User
