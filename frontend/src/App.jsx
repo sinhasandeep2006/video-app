@@ -1,34 +1,38 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-
-function App() {
-  const [count, setCount] = useState(0)
-
+import React, { useEffect, useState } from 'react'
+import { Route, Routes } from 'react-router'
+import Home from './pages/Home.jsx';
+import Signup from './pages/Signup.jsx';
+import LoginPage from './pages/LoginPage.jsx';
+import NotificationPage from './pages/NotificationPage.jsx';
+import CallPage from './pages/CallPage.jsx';
+import Onboarding from './pages/Onboarding.jsx';
+import Chatpage from './pages/Chatpage.jsx';
+import toast, { Toaster } from 'react-hot-toast';
+import { useQuery } from '@tanstack/react-query';
+import axios from "axios"
+import { axiosInstance } from './lib/axios.js';
+const App = () => { 
+  
+  const {data,isLoading,error} =useQuery({queryKey:["todos"],
+    queryVn:async ()=>{
+      const res= await axiosInstance.get()
+      return res.data
+    }
+})
+console.log(data)
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <div className=" h-screen " data-theme="night">
+      <Routes>
+        <Route path='/' element={<Home/>} />
+        <Route path='/signup' element={<Signup/>} />
+        <Route path='/login' element={<LoginPage/>} />
+        <Route path='/notifications' element={<NotificationPage/>} />
+        <Route path='/chat' element={<Chatpage/>} />
+        <Route path='/call' element={<CallPage/>} />
+        <Route path='/Onboarding' element={<Onboarding/>} />
+      </Routes>
+      <Toaster/>
+    </div>
   )
 }
 
